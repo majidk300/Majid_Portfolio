@@ -12,6 +12,8 @@ export const PROFILE = {
   githubUsername: "majidk300",
   linkedin: "https://www.linkedin.com/in/md-majid-naseem-b8a579281",
   avatar: "https://avatars.githubusercontent.com/u/59910150?v=4",
+  resume: "https://drive.google.com/file/d/1Z5xH31RFbBKUo8Il4AO_Id5VxV_nwllt/view?usp=sharing",
+  whatsapp: "https://wa.me/917644918223?text=Hi%20Majid%2C%20I%20saw%20your%20portfolio%20and%20want%20to%20connect.",
 };
 
 export const SKILLS = {

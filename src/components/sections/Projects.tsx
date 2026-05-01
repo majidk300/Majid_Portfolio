@@ -111,7 +111,7 @@ export default function ProjectsSection() {
         <motion.div className="section-header center"
           initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
           <span className="section-label">04 / Projects</span>
-          <h2 className="section-title">Featured <span className="accent">Work</span></h2>
+          <h2 className="section-title">Featured <span className="accent">Projects</span></h2>
           <p className="section-desc">Real-world applications built with production-quality code</p>
           <div className="divider" />
         </motion.div>

@@ -13,41 +13,93 @@ import ExperienceSection from "./components/sections/Experience";
 import ProjectsSection from "./components/sections/Projects";
 import GitHubSection from "./components/sections/GitHub";
 import ContactSection from "./components/sections/Contact";
-import { PROFILE } from "./data/portfolio";
+import { PROFILE, PROJECTS } from "./data/portfolio";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 10 * 60 * 1000 } },
 });
 
-const SEO_TITLE       = "MD Majid Naseem — Full-Stack Software Engineer | Java, Spring Boot, React";
-const SEO_DESC        = "MD Majid Naseem is a passionate Full-Stack Software Engineer from Aligarh, India, specializing in Java, Spring Boot, React.js, .NET, MySQL, REST APIs, and JWT authentication. Built PYQ Pedia serving 100+ users. Open to work.";
-const SEO_KEYWORDS    = "MD Majid Naseem, Majid Naseem, majidk300, Full-Stack Developer, Software Engineer India, Java Developer, Spring Boot Developer, React Developer, .NET Developer, App Developer, API Developer, Aligarh Developer, Patliputra University, PYQ Pedia, Portfolio";
-const SEO_URL         = "https://majidk300.github.io";
+const SEO_TITLE       = "MD Majid Naseem (Majid) | Full-Stack Software Engineer Portfolio";
+const SEO_DESC        = "Official portfolio of MD Majid Naseem, also known as Majid or Naseem, a Full-Stack Software Engineer from Aligarh, Uttar Pradesh, India. Java, Spring Boot, React.js, .NET, C#, MySQL, REST APIs, JWT authentication, Flutter, cloud, PYQ Pedia, Smart Contact Manager and e-commerce projects.";
+const SEO_KEYWORDS    = "MD Majid Naseem, Majid Naseem, Majid, Naseem, MD Majid, majidk300, Majid portfolio, Naseem portfolio, MD Majid Naseem portfolio, Full-Stack Software Engineer, Full-Stack Developer, Java Developer, Spring Boot Developer, React Developer, React.js Developer, .NET Developer, C# Developer, MySQL Developer, REST API Developer, JWT Authentication, Flutter Developer, Cloud Engineer, AWS, Azure, Software Engineer India, Software Developer India, Aligarh Developer, Uttar Pradesh Developer, Patliputra University, Softential Solutions LLP, PYQ Pedia, Smart Contact Manager, E-Commerce Web App, portfolio, resume";
+const SEO_URL         = "https://majidk300.github.io/";
 const SEO_IMAGE       = PROFILE.avatar!;
 const STRUCTURED_DATA = JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "MD Majid Naseem",
-  alternateName: "Majid Naseem",
-  url: SEO_URL,
-  image: SEO_IMAGE,
-  jobTitle: "Full-Stack Software Engineer",
-  description: SEO_DESC,
-  email: PROFILE.email,
-  telephone: PROFILE.phone,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Aligarh",
-    addressRegion: "Uttar Pradesh",
-    addressCountry: "IN",
-  },
-  sameAs: [PROFILE.github, PROFILE.linkedin],
-  knowsAbout: ["Java", "Spring Boot", "React.js", ".NET", "MySQL", "REST API", "JWT", "Android Development", "Full-Stack Development"],
-  alumniOf: {
-    "@type": "CollegeOrUniversity",
-    name: "Patliputra University",
-    address: "Patna, Bihar, India",
-  },
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SEO_URL}#person`,
+      name: PROFILE.name,
+      givenName: "Majid",
+      familyName: "Naseem",
+      alternateName: ["Majid", "Naseem", "MD Majid", "Majid Naseem", "majidk300"],
+      url: SEO_URL,
+      image: SEO_IMAGE,
+      jobTitle: PROFILE.role,
+      description: SEO_DESC,
+      email: PROFILE.email,
+      telephone: "+917644918223",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Aligarh",
+        addressRegion: "Uttar Pradesh",
+        addressCountry: "IN",
+      },
+      sameAs: [PROFILE.github, PROFILE.linkedin],
+      knowsAbout: [
+        "Java", "Spring Boot", "React.js", ".NET", "C#", "MySQL", "SQL",
+        "REST APIs", "JWT Authentication", "Flutter", "AWS", "Azure",
+        "Full-Stack Development", "Backend Development", "Frontend Development",
+        "Responsive Web Design", "Payment Integration", "Razorpay",
+        "Software Engineering", "Web Application Development"
+      ],
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "Patliputra University",
+        address: "Patna, Bihar, India",
+      },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${SEO_URL}#profile`,
+      url: SEO_URL,
+      name: "MD Majid Naseem Portfolio",
+      headline: SEO_TITLE,
+      description: SEO_DESC,
+      image: SEO_IMAGE,
+      inLanguage: "en-IN",
+      mainEntity: { "@id": `${SEO_URL}#person` },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SEO_URL}#website`,
+      url: SEO_URL,
+      name: "MD Majid Naseem Portfolio",
+      alternateName: ["Majid Portfolio", "Naseem Portfolio", "majidk300 Portfolio"],
+      description: SEO_DESC,
+      publisher: { "@id": `${SEO_URL}#person` },
+      inLanguage: "en-IN",
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${SEO_URL}#projects`,
+      name: "Featured Projects by MD Majid Naseem",
+      itemListElement: PROJECTS.map((project, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "SoftwareApplication",
+          name: project.title,
+          description: project.description,
+          applicationCategory: "WebApplication",
+          programmingLanguage: project.tech,
+          url: project.liveUrl || project.githubUrl || SEO_URL,
+          author: { "@id": `${SEO_URL}#person` },
+        },
+      })),
+    },
+  ],
 });
 
 function Portfolio() {
@@ -98,7 +150,6 @@ function App() {
           <meta name="author"            content="MD Majid Naseem" />
           <meta name="robots"            content="index, follow" />
           <meta name="language"          content="English" />
-          <meta name="revisit-after"     content="7 days" />
           <link rel="canonical"          href={SEO_URL} />
 
           {/* ── Open Graph (Facebook / WhatsApp / LinkedIn preview) ── */}
@@ -117,10 +168,8 @@ function App() {
           <meta name="twitter:title"       content={SEO_TITLE} />
           <meta name="twitter:description" content={SEO_DESC} />
           <meta name="twitter:image"       content={SEO_IMAGE} />
-          <meta name="twitter:creator"     content="@majidk300" />
 
           {/* ── Google / Search specific ── */}
-          <meta name="google-site-verification" content="" />
           <meta itemProp="name"        content="MD Majid Naseem" />
           <meta itemProp="description" content={SEO_DESC} />
           <meta itemProp="image"       content={SEO_IMAGE} />

@@ -24,7 +24,7 @@ export default function ContactSection() {
 
   const contacts = [
     { icon: Mail,        label: "Email",    value: PROFILE.email,   href: `mailto:${PROFILE.email}`, color: "var(--col-green)"  },
-    { icon: Phone,       label: "Phone",    value: PROFILE.phone,   href: `tel:${PROFILE.phone}`,    color: "var(--col-cyan)"   },
+    { icon: Phone,       label: "WhatsApp", value: PROFILE.phone,   href: PROFILE.whatsapp,         color: "var(--col-cyan)"   },
     { icon: ExternalLink, label: "GitHub",  value: "github.com/majidk300", href: PROFILE.github,     color: "var(--col-purple)" },
     { icon: ExternalLink, label: "LinkedIn", value: "MD Majid Naseem", href: PROFILE.linkedin,       color: "var(--col-blue)"   },
     { icon: MapPin,      label: "Location", value: PROFILE.location, href: null,                      color: "var(--col-cyan)"   },

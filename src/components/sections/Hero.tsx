@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, ChevronDown, ArrowRight, Download, MapPin } from "lucide-react";
+import { MessageCircle, ChevronDown, ArrowRight, Download, MapPin } from "lucide-react";
 import { PROFILE, TECH_BADGES } from "../../data/portfolio";
 
 /* ─── Typewriter ─────────────────────────────────────────────────────────── */
@@ -427,6 +427,16 @@ const anim = (d: number) => ({
   transition: { duration: 0.6, delay: d },
 });
 
+function scrollToSection(id: string) {
+  const section = document.getElementById(id);
+  if (!section) return;
+
+  const navOffset = 78;
+  const top = section.getBoundingClientRect().top + window.scrollY - navOffset;
+  window.scrollTo({ top, behavior: "smooth" });
+  window.history.replaceState(null, "", `#${id}`);
+}
+
 export default function HeroSection() {
   return (
     <section id="hero" style={{
@@ -511,18 +521,21 @@ export default function HeroSection() {
             </motion.div>
 
             <motion.div {...anim(0.48)} style={{ display: "flex", flexWrap: "wrap", gap: 11, marginTop: 4 }}>
-              <button className="btn btn-primary"
-                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
+              <a href="#projects" className="btn btn-primary"
+                onClick={(e) => { e.preventDefault(); scrollToSection("projects"); }}>
                 View Projects <ArrowRight size={14}/>
-              </button>
-              <button className="btn btn-outline"
-                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
-                <Mail size={13}/> Contact Me
-              </button>
-              <a href="https://drive.google.com/file/d/1Z5xH31RFbBKUo8Il4AO_Id5VxV_nwllt/view?usp=sharing"
+              </a>
+              <a href={PROFILE.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Download Resume PDF"
+                aria-label="Message MD Majid Naseem on WhatsApp"
+                className="btn btn-outline">
+                <MessageCircle size={13}/> Contact Me
+              </a>
+              <a href={PROFILE.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open MD Majid Naseem resume PDF"
                 className="btn btn-ghost">
                 <Download size={13}/> Resume
               </a>
@@ -576,7 +589,7 @@ export default function HeroSection() {
 
       {/* Scroll hint */}
       <button
-        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+        onClick={() => scrollToSection("about")}
         style={{
           position: "absolute", bottom: 24, left: "50%", transform: "translateX(-50%)",
           display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
