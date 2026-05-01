@@ -204,13 +204,16 @@ interface BubbleProps {
   homeY: number;
   delay: number;
   duration: number;
+  compact?: boolean;
 }
 
-function FloatBubble({ b, homeX, homeY, delay, duration }: BubbleProps) {
+function FloatBubble({ b, homeX, homeY, delay, duration, compact = false }: BubbleProps) {
   /* Generate a looping 6-point wander path */
   const seed  = b.id.charCodeAt(0) + b.id.charCodeAt(1);
-  const wX    = (i: number) => homeX + Math.sin((i * 1.3 + seed) * 0.8) * 22;
-  const wY    = (i: number) => homeY + Math.cos((i * 1.1 + seed) * 0.9) * 18;
+  const driftX = compact ? 8 : 22;
+  const driftY = compact ? 7 : 18;
+  const wX    = (i: number) => homeX + Math.sin((i * 1.3 + seed) * 0.8) * driftX;
+  const wY    = (i: number) => homeY + Math.cos((i * 1.1 + seed) * 0.9) * driftY;
   const xs    = [0,1,2,3,4,5,6].map(wX);
   const ys    = [0,1,2,3,4,5,6].map(wY);
 
@@ -245,19 +248,21 @@ function FloatBubble({ b, homeX, homeY, delay, duration }: BubbleProps) {
         display:        "flex",
         flexDirection:  "column",
         alignItems:     "center",
-        gap:            3,
-        padding:        "6px 9px",
-        borderRadius:   12,
+        gap:            compact ? 2 : 3,
+        padding:        compact ? "5px 7px" : "6px 9px",
+        borderRadius:   compact ? 10 : 12,
         background:     b.bg,
         border:         `1.5px solid ${b.border}30`,
         boxShadow:      `0 4px 14px ${b.border}20, 0 1px 3px rgba(0,0,0,0.06)`,
-        minWidth:       48,
+        minWidth:       compact ? 42 : 48,
+        transform:      compact ? "scale(0.86)" : undefined,
+        transformOrigin:"center",
         userSelect:     "none",
       }}>
         {b.icon}
         <span style={{
           fontFamily:   "var(--font-mono)",
-          fontSize:     8.5,
+          fontSize:     compact ? 7.5 : 8.5,
           fontWeight:   600,
           color:        "#475569",
           whiteSpace:   "nowrap",
@@ -270,39 +275,96 @@ function FloatBubble({ b, homeX, homeY, delay, duration }: BubbleProps) {
   );
 }
 
+const MOBILE_BUBBLE_HOMES = [
+  { x: 0,    y: -138 },
+  { x: -82,  y: -116 },
+  { x: 82,   y: -116 },
+  { x: -128, y: -58 },
+  { x: 128,  y: -58 },
+  { x: -138, y: 8 },
+  { x: 138,  y: 8 },
+  { x: -126, y: 74 },
+  { x: 126,  y: 74 },
+  { x: -78,  y: 126 },
+  { x: 78,   y: 126 },
+  { x: 0,    y: 144 },
+];
+
 /* ─── Avatar with floating bubbles ──────────────────────────────────────── */
-function Avatar() {
+interface AvatarProps {
+  compact?: boolean;
+}
+
+function Avatar({ compact = false }: AvatarProps) {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches
+  );
+  const [viewportWidth, setViewportWidth] = useState(
+    () => typeof window !== "undefined" ? window.innerWidth : 1024
+  );
+
+  useEffect(() => {
+    const update = () => {
+      setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+      setViewportWidth(window.innerWidth);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   /*
     Place bubbles on two virtual rings (r1=155, r2=220) but stagger them
     so they look naturally distributed. The float animation drifts each
     bubble off its home position smoothly.
   */
-  const r1 = 158, r2 = 225;
+  const mobile = isMobile || compact;
+  const mobileScale = mobile
+    ? Math.min(1, Math.max(0.78, (viewportWidth - 32) / 360))
+    : 1;
+  const photoSize = mobile ? Math.round(220 * mobileScale) : 220;
+  const glowSize = mobile ? Math.round(250 * mobileScale) : 250;
+  const r1 = 158;
+  const r2 = 225;
   const ring1 = BUBBLES.slice(0, 6);
   const ring2 = BUBBLES.slice(6);
 
   const placed: BubbleProps[] = [];
 
-  ring1.forEach((b, i) => {
-    const angle = ((360 / ring1.length) * i - 90) * (Math.PI / 180);
-    placed.push({
-      b,
-      homeX: Math.cos(angle) * r1,
-      homeY: Math.sin(angle) * r1,
-      delay:    0.9 + i * 0.12,
-      duration: 5.5 + (i % 3) * 1.2,
+  if (mobile) {
+    BUBBLES.forEach((b, i) => {
+      const home = MOBILE_BUBBLE_HOMES[i % MOBILE_BUBBLE_HOMES.length];
+      placed.push({
+        b,
+        homeX: home.x * mobileScale,
+        homeY: home.y * mobileScale,
+        delay: 0.75 + i * 0.08,
+        duration: 5.2 + (i % 4) * 0.75,
+        compact: true,
+      });
     });
-  });
-  ring2.forEach((b, i) => {
-    const angle = ((360 / ring2.length) * i - 60) * (Math.PI / 180);
-    placed.push({
-      b,
-      homeX: Math.cos(angle) * r2,
-      homeY: Math.sin(angle) * r2,
-      delay:    1.2 + i * 0.13,
-      duration: 6.5 + (i % 3) * 1.3,
+  } else {
+    ring1.forEach((b, i) => {
+      const angle = ((360 / ring1.length) * i - 90) * (Math.PI / 180);
+      placed.push({
+        b,
+        homeX: Math.cos(angle) * r1,
+        homeY: Math.sin(angle) * r1,
+        delay:    0.9 + i * 0.12,
+        duration: 5.5 + (i % 3) * 1.2,
+      });
     });
-  });
+    ring2.forEach((b, i) => {
+      const angle = ((360 / ring2.length) * i - 60) * (Math.PI / 180);
+      placed.push({
+        b,
+        homeX: Math.cos(angle) * r2,
+        homeY: Math.sin(angle) * r2,
+        delay:    1.2 + i * 0.13,
+        duration: 6.5 + (i % 3) * 1.3,
+      });
+    });
+  }
 
   return (
     <motion.div
@@ -316,14 +378,14 @@ function Avatar() {
     >
       {/* Soft radial glow */}
       <div style={{
-        position: "absolute", width: 250, height: 250, borderRadius: "50%",
+        position: "absolute", width: glowSize, height: glowSize, borderRadius: "50%",
         background: "radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%)",
         animation: "pulse-shadow 4s ease-in-out infinite",
         zIndex: 1,
       }}/>
 
       {/* Photo — BIGGER: 220px */}
-      <div style={{ position: "relative", width: 220, height: 220, zIndex: 5 }}>
+      <div style={{ position: "relative", width: photoSize, height: photoSize, zIndex: 5 }}>
         <div style={{
           width: "100%", height: "100%", borderRadius: "50%", padding: 3.5,
           background: "linear-gradient(135deg,#2563eb,#7c3aed,#06b6d4)",
@@ -457,7 +519,7 @@ export default function HeroSection() {
                 onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
                 <Mail size={13}/> Contact Me
               </button>
-              <a href="https://drive.google.com/uc?export=download&id=1Z5xH31RFbBKUo8Il4AO_Id5VxV_nwllt"
+              <a href="https://drive.google.com/file/d/1Z5xH31RFbBKUo8Il4AO_Id5VxV_nwllt/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Download Resume PDF"
@@ -535,8 +597,11 @@ export default function HeroSection() {
           .hero-visual { min-height: 460px !important; order: -1; }
         }
         @media (max-width: 640px) {
-          .hero-visual { min-height: 380px !important; overflow: hidden; }
-          .hero-visual > div { width: 360px !important; height: 360px !important; }
+          .hero-visual { min-height: min(390px, calc(100vw + 42px)) !important; overflow: visible; }
+          .hero-visual > div {
+            width: min(360px, calc(100vw - 32px)) !important;
+            height: min(360px, calc(100vw - 32px)) !important;
+          }
         }
       `}</style>
     </section>
