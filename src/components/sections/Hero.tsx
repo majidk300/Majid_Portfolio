@@ -434,7 +434,8 @@ function scrollToSection(id: string) {
   const navOffset = 78;
   const top = section.getBoundingClientRect().top + window.scrollY - navOffset;
   window.scrollTo({ top, behavior: "smooth" });
-  window.history.replaceState(null, "", `#${id}`);
+  setTimeout(() => section.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  window.history.pushState(null, "", `#${id}`);
 }
 
 export default function HeroSection() {
@@ -444,21 +445,23 @@ export default function HeroSection() {
       display: "flex", alignItems: "center", overflow: "hidden",
       background: "linear-gradient(160deg,#f0f7ff 0%,#f8fafc 55%,#faf5ff 100%)",
     }}>
-      <div className="grid-bg" style={{ position: "absolute", inset: 0 }}/>
+      <div className="grid-bg" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }}/>
       <div style={{
         position: "absolute", right: "-5%", top: "5%",
         width: 600, height: 600, borderRadius: "50%",
         background: "radial-gradient(circle,rgba(37,99,235,0.07) 0%,transparent 70%)",
         pointerEvents: "none",
+        zIndex: 0,
       }}/>
       <div style={{
         position: "absolute", left: "-8%", bottom: "5%",
         width: 480, height: 480, borderRadius: "50%",
         background: "radial-gradient(circle,rgba(124,58,237,0.05) 0%,transparent 70%)",
         pointerEvents: "none",
+        zIndex: 0,
       }}/>
 
-      <div className="pg-wrap" style={{ paddingTop: 100, paddingBottom: 80, width: "100%" }}>
+      <div className="pg-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 100, paddingBottom: 80, width: "100%" }}>
         <div className="hero-layout" style={{
           display: "grid",
           gridTemplateColumns: "1fr",
@@ -520,11 +523,11 @@ export default function HeroSection() {
               {TECH_BADGES.map(b => <span key={b} className="tag">{b}</span>)}
             </motion.div>
 
-            <motion.div {...anim(0.48)} style={{ display: "flex", flexWrap: "wrap", gap: 11, marginTop: 4 }}>
-              <a href="#projects" className="btn btn-primary"
+            <motion.div {...anim(0.48)} style={{ position: "relative", zIndex: 10, display: "flex", flexWrap: "wrap", gap: 11, marginTop: 4 }}>
+              <button type="button" className="btn btn-primary"
                 onClick={(e) => { e.preventDefault(); scrollToSection("projects"); }}>
                 View Projects <ArrowRight size={14}/>
-              </a>
+              </button>
               <a href={PROFILE.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -594,7 +597,7 @@ export default function HeroSection() {
           position: "absolute", bottom: 24, left: "50%", transform: "translateX(-50%)",
           display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
           background: "none", border: "none", cursor: "pointer",
-          opacity: .45, transition: "opacity .2s",
+          opacity: .45, transition: "opacity .2s", zIndex: 3,
         }}
         onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
         onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "0.45"}>
