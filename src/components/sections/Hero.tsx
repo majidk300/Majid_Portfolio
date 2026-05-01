@@ -450,14 +450,20 @@ export default function HeroSection() {
 
             <motion.div {...anim(0.48)} style={{ display: "flex", flexWrap: "wrap", gap: 11, marginTop: 4 }}>
               <button className="btn btn-primary"
-                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}>
+                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
                 View Projects <ArrowRight size={14}/>
               </button>
               <button className="btn btn-outline"
-                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}>
+                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
                 <Mail size={13}/> Contact Me
               </button>
-              <a href="#" className="btn btn-ghost"><Download size={13}/> Resume</a>
+              <a href="https://drive.google.com/uc?export=download&id=1Z5xH31RFbBKUo8Il4AO_Id5VxV_nwllt"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download Resume PDF"
+                className="btn btn-ghost">
+                <Download size={13}/> Resume
+              </a>
             </motion.div>
 
             <motion.div {...anim(0.52)} style={{ display: "flex", alignItems: "center", gap: 14 }}>
@@ -508,7 +514,7 @@ export default function HeroSection() {
 
       {/* Scroll hint */}
       <button
-        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" })}
         style={{
           position: "absolute", bottom: 24, left: "50%", transform: "translateX(-50%)",
           display: "flex", flexDirection: "column", alignItems: "center", gap: 5,

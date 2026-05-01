@@ -4,7 +4,7 @@ export const PROFILE = {
   role: "Full-Stack Software Engineer",
   tagline: "Building scalable systems with elegant code",
   summary:
-    "Passionate full-stack developer with hands-on experience in Java, Spring Boot, React.js, .NET, MySQL, REST APIs, and JWT authentication. I craft secure, performant web applications — from robust backend architectures to polished user interfaces.",
+    "Full-Stack Software Engineer from Aligarh, India with hands-on experience in Java, Spring Boot, React.js, .NET, C#, MySQL, REST APIs, JWT authentication and production-ready web applications. I build secure backend systems, responsive frontends, payment-enabled platforms and enterprise-grade software.",
   location: "Aligarh, Uttar Pradesh, India",
   email: "majidnaseem726@gmail.com",
   phone: "+91 7644918223",

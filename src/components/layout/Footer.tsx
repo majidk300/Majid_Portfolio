@@ -2,7 +2,7 @@ import { Heart } from "lucide-react";
 import { PROFILE, NAV_LINKS } from "../../data/portfolio";
 
 export default function Footer() {
-  const go = (href: string) => document.getElementById(href.replace("#",""))?.scrollIntoView({ behavior: "smooth" });
+  const go = (href: string) => document.getElementById(href.replace("#",""))?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <footer style={{ borderTop: "1px solid var(--col-border)", paddingTop: 48, paddingBottom: 48 }}>
@@ -60,9 +60,6 @@ export default function Footer() {
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 8,
           fontSize: 12, color: "var(--col-text3)" }}>
           <span>© {new Date().getFullYear()} MD Majid Naseem. All rights reserved.</span>
-          <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            Built with <Heart size={11} fill="#ef4444" style={{ color: "#ef4444" }} /> using React, Vite & Three.js
-          </span>
         </div>
       </div>
     </footer>

@@ -25,7 +25,7 @@ export default function Navbar() {
   }, []);
 
   const go = (href: string) => {
-    document.getElementById(href.replace("#",""))?.scrollIntoView({ behavior:"smooth" });
+    document.getElementById(href.replace("#",""))?.scrollIntoView({ behavior:"smooth", block:"start" });
     setOpen(false);
   };
 
