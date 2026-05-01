@@ -1,4 +1,3 @@
-import { Heart } from "lucide-react";
 import { PROFILE, NAV_LINKS } from "../../data/portfolio";
 
 export default function Footer() {
