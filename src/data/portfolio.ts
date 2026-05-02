@@ -11,7 +11,7 @@ export const PROFILE = {
   github: "https://github.com/majidk300",
   githubUsername: "majidk300",
   linkedin: "https://www.linkedin.com/in/md-majid-naseem-b8a579281",
-  avatar: "https://avatars.githubusercontent.com/u/59910150?v=4",
+  avatar: "https://media.licdn.com/dms/image/v2/D5603AQG-xytXHqTH4w/profile-displayphoto-shrink_800_800/B56ZsSSNgVIcAc-/0/1765538324382?e=1779321600&v=beta&t=KbBHAe8YTwjzoa4HUV9KfpZWCpa0mtuplWbsVH-jI7U",
   resume: "https://drive.google.com/file/d/1Z5xH31RFbBKUo8Il4AO_Id5VxV_nwllt/view?usp=sharing",
   whatsapp: "https://wa.me/917644918223?text=Hi%20Majid%2C%20I%20saw%20your%20portfolio%20and%20want%20to%20connect.",
 };
